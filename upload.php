@@ -156,7 +156,7 @@
     for ($i = 0; $i < count($modes); $i++) {
       echo "<div class='item'><div class='title'>" . ${"effect_name_" . $modes[$i]} . " | Size: " . round(filesize($paths[$i]) / 1024 / 1024, 1) . " MiB</div>";
       $data = file_get_contents($paths[$i]);
-      echo "<img class='image' src='data:image/jpeg;base64," . base64_encode($data) . "'></div>";
+      echo "<img class='image' src='data:image/gif;base64," . base64_encode($data) . "'></div>";
     }
 
     for ($i = 0; $i < count($paths); $i++) {
