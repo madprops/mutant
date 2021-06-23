@@ -1,0 +1,170 @@
+<html>
+  <head>
+    <title>Mutant</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="guy.png?v=1" type="image/x-icon">
+    <style>
+      body, html {
+        font-family: sans-serif;
+        background-color: black;
+        text-align: center;
+        color: #FF2D40;
+      }
+      #image {
+        padding-top: 20px;
+        max-height: 600px;
+        max-width: 600px;
+      }
+      #form {
+        display: block;
+        padding-top: 20px;
+      }
+      #info {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .inline {
+        display: inline-block;
+      }
+      .button {
+        cursor: pointer;
+        transition: text-shadow 250ms;
+      }
+      .button:hover {
+        text-shadow: 0 0 12px white;
+      }
+      .numb {
+        width: 8em;
+      }
+    </style>
+    <script>
+      window.onload = function() {
+        document.getElementById('form').onsubmit = function() {
+            return check_form()
+        }
+
+        // document.getElementById('file_1').addEventListener('change', on_file_select, false)
+
+        // let event = document.createEvent("UIEvents")
+        // event.initUIEvent("change", true, true)
+        // document.querySelector("#file_1").dispatchEvent(event)
+      }
+
+      function check_form() {
+        let ok = false
+
+        for(let item of Array.from(document.querySelectorAll(".check_effect"))) {
+          if(item.checked) {
+            ok = true
+            break
+          }
+        }
+
+        if(!ok) {
+          alert("No effects selected.")
+          return false
+        }
+
+        let num_files = 0
+
+        for(let file of Array.from(document.querySelectorAll(".file"))) {
+          if(file.value) {
+            num_files += 1
+          }
+        }
+
+        console.log(num_files)
+
+        if(num_files == 0) {
+          alert("No file selected.")
+          return false
+        }
+
+        let submit = document.querySelector("#submit")
+        submit.value = "Uploading"
+        submit.disabled = true;
+      }
+
+      function on_file_select(evt) {
+        console.log("Updating image")
+
+        let files = evt.target.files
+
+        if(files.length == 0) {
+          return
+        }
+
+        let f = files[0]
+
+        if (!f.type.match('image.*')) {
+          return
+        }
+
+        let reader = new FileReader()
+
+        reader.onload = (function(tf) {
+          return function(e) {
+            document.querySelector('#image').src = e.target.result
+          }
+        })(f);
+
+        reader.readAsDataURL(f)
+      }
+
+      function select_all() {
+        for(let item of Array.from(document.querySelectorAll('.check_effect'))) {
+          item.checked = true;
+        }
+      }
+
+      function unselect_all() {
+        for(let item of Array.from(document.querySelectorAll('.check_effect'))) {
+          item.checked = false;
+        }
+      }
+
+      function default_delay() {
+        document.querySelector('#delay').value = 250
+      }
+
+      function clear_file(n) {
+        document.querySelector(`#file_${n}`).value = ""
+      }
+    </script>
+  </head>
+  <body>
+    <div id='info'>Turn images into gifs<br>Provide at least 1 image</div>
+    <img src='guy.png' id='image'>
+    <form id='form' method='post' action='upload.php' enctype="multipart/form-data">
+      <br>
+      <div class='inline button' onclick='clear_file(1)'>Remove</div>&nbsp;&nbsp;
+      <input type='file' id='file_1' class='file' name='image_1' accept="image/*"><br><br>
+      <div class='inline button' onclick='clear_file(2)'>Remove</div>&nbsp;&nbsp;
+      <input type='file' id='file_2' class='file' name='image_2' accept="image/*"><br><br>
+      <div class='inline button' onclick='clear_file(3)'>Remove</div>&nbsp;&nbsp;
+      <input type='file' id='file_3' class='file' name='image_3' accept="image/*"><br><br>
+      <div class='inline button' onclick='clear_file(4)'>Remove</div>&nbsp;&nbsp;
+      <input type='file' id='file_4' class='file' name='image_4' accept="image/*"><br><br><br>
+      
+      <input type='submit' id='submit' value='Mutate'>
+
+      <br><br><br>
+      Glitch <input class='check_effect' type='checkbox' name='effect_1' checked> &nbsp;&nbsp;
+      Wave <input class='check_effect' type='checkbox' name='effect_2' checked> &nbsp;&nbsp;
+      Mirror <input class='check_effect' type='checkbox' name='effect_3' checked> &nbsp;&nbsp;
+      Static <input class='check_effect' type='checkbox' name='effect_4' checked> <br>
+      Glow <input class='check_effect' type='checkbox' name='effect_5' checked> &nbsp;&nbsp;
+      Glass <input class='check_effect' type='checkbox' name='effect_6' checked> &nbsp;&nbsp;
+      Color <input class='check_effect' type='checkbox' name='effect_7' checked> &nbsp;&nbsp;
+      Chalk <input class='check_effect' type='checkbox' name='effect_8' checked> &nbsp;&nbsp;
+      <br><br>
+      <div class='inline button' onclick='select_all()'>Select All</div>&nbsp;&nbsp;|&nbsp;
+      <div class='inline button' onclick='unselect_all()'>Unselect All</div>
+      <br><br><br>
+      Delay between frames (ms): <input type='number' min='10' max='10000' value='250' class='numb' id='delay' name='delay'>
+      <br><br>
+      <div class='inline button' onclick='default_delay()'>Default</div>
+      <br><br>
+    </form>
+  </body>
+</html>
