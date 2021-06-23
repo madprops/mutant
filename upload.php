@@ -1,6 +1,8 @@
 <?php
   error_reporting(E_ALL);
   ini_set("display_errors", "On");
+  $uploaded = [];
+  $paths = [];
 
   function randnumb($length = 3) {
     return substr(str_shuffle(str_repeat($x='0123456789', ceil($length/strlen($x)) )),1,$length);
@@ -36,7 +38,6 @@
 
   if($ok) {
     $fstring = "";
-    $uploaded = [];
     $start = true;
 
     for ($i = 0; $i < count($images); $i++) {
@@ -44,6 +45,7 @@
       $ext = substr($fname, strrpos($fname, '.') + 1);
       $fname2 = time() . "_" . randnumb() . "_" . $i . "." . $ext;
       $target = "uploads/" . $fname2;
+      global $uploaded;
 
       if(move_uploaded_file($images[$i]["tmp_name"], $target)) {
         array_push($uploaded, $target);
@@ -57,10 +59,6 @@
 
     if($start) {
       process($fstring);
-    }
-
-    for ($i = 0; $i < count($uploaded); $i++) {
-      unlink($uploaded[$i]);
     }
   }
 
@@ -88,6 +86,7 @@
 
     $date1 = microtime(true);
     $cmd = "rust/target/release/mutant " . $modestring . " " . $delay . " " . $filestring;
+    global $paths;
     $paths = explode(" ", exec($cmd));
     $date2 = microtime(true);
 
@@ -153,14 +152,30 @@
     $effect_name_7 = "Color";
     $effect_name_8 = "Chalk";
 
-    for ($i = 0; $i < count($modes); $i++) {
-      echo "<div class='item'><div class='title'>" . ${"effect_name_" . $modes[$i]} . " | Size: " . round(filesize($paths[$i]) / 1024 / 1024, 1) . " MiB</div>";
-      $data = file_get_contents($paths[$i]);
-      echo "<img class='image' src='data:image/gif;base64," . base64_encode($data) . "'></div>";
+    try {
+      for ($i = 0; $i < count($modes); $i++) {
+        echo "<div class='item'><div class='title'>" . ${"effect_name_" . $modes[$i]} . " | Size: " . round(filesize($paths[$i]) / 1024 / 1024, 1) . " MiB</div>";
+        $data = file_get_contents($paths[$i]);
+        echo "<img class='image' src='data:image/gif;base64," . base64_encode($data) . "'></div>";
+      }
+    } catch (Exception $e) {
+      cleanup();
+      exit(0);
     }
+
+    cleanup();
+  }
+
+  function cleanup() {
+    global $uploaded;
+    global $paths;
 
     for ($i = 0; $i < count($paths); $i++) {
       unlink($paths[$i]);
+    }
+
+    for ($i = 0; $i < count($uploaded); $i++) {
+      unlink($uploaded[$i]);
     }
   }
 ?>
