@@ -85,7 +85,14 @@
     }
 
     $date1 = microtime(true);
-    $cmd = "rust/target/release/mutant " . $modestring . " " . $delay . " " . $filestring;
+
+    try {
+      $cmd = "rust/target/release/mutant " . $modestring . " " . $delay . " " . $filestring;
+    } catch (Exception $e) {
+      cleanup();
+      exit(0);
+    }
+
     global $paths;
     $paths = explode(" ", exec($cmd));
     $date2 = microtime(true);
