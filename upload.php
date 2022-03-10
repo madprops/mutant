@@ -1,11 +1,26 @@
 <?php
+  $recaptcha_key = file_get_contents("recaptcha.key");
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify?secret=".$recaptcha_key."&response=".$_POST["g-recaptcha-response"]);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response = curl_exec($ch);
+  curl_close($ch);
+  $response = json_decode($response);
+
+  if($response->success) {
+    // OK
+  } else {
+    echo "reCAPTHCA verification failed, please try again.";
+    exit(0);
+  }
+
   error_reporting(E_ALL);
   ini_set("display_errors", "On");
   $uploaded = [];
   $paths = [];
 
   function randnumb($length = 3) {
-    return substr(str_shuffle(str_repeat($x='0123456789', ceil($length/strlen($x)) )),1,$length);
+    return substr(str_shuffle(str_repeat($x="0123456789", ceil($length/strlen($x)) )),1,$length);
   }
 
   $ok = true;

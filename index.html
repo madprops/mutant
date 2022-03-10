@@ -10,47 +10,65 @@
         text-align: center;
         color: #FF2D40;
       }
+
       #image {
         padding-top: 20px;
         max-height: 600px;
         max-width: 600px;
       }
+
       #form {
         display: block;
         padding-top: 20px;
       }
+
       #info {
         padding-top: 10px;
         padding-bottom: 10px;
       }
+
       .inline {
         display: inline-block;
       }
+
       .button {
         cursor: pointer;
         transition: text-shadow 250ms;
       }
+
       .button:hover {
         text-shadow: 0 0 12px white;
       }
+
       .numb {
         width: 8em;
       }
+      
+      .recaptcha_widget {
+        display: inline-block;
+      }
     </style>
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script>
+      let recaptcha_checked = false
+
+      function recaptcha_callback() {
+				recaptcha_checked = true
+			}
+
       window.onload = function() {
         document.getElementById('form').onsubmit = function() {
             return check_form()
         }
-
-        // document.getElementById('file_1').addEventListener('change', on_file_select, false)
-
-        // let event = document.createEvent("UIEvents")
-        // event.initUIEvent("change", true, true)
-        // document.querySelector("#file_1").dispatchEvent(event)
       }
 
       function check_form() {
+        if (!recaptcha_checked) {
+          return false
+        }
+
         let ok = false
 
         for(let item of Array.from(document.querySelectorAll(".check_effect"))) {
@@ -145,6 +163,10 @@
       <input type='file' id='file_3' class='file' name='image_3' accept="image/*"><br><br>
       <div class='inline button' onclick='clear_file(4)'>Remove</div>&nbsp;&nbsp;
       <input type='file' id='file_4' class='file' name='image_4' accept="image/*"><br><br><br>
+
+      <div class="recaptcha_widget g-recaptcha" data-sitekey="6LcrUsoeAAAAAGVg1HQFTO0RDuVCidJo70cKSH7O" data-callback="recaptcha_callback"></div>
+
+      <br><br><br>
       
       <input type='submit' id='submit' value='Mutate'>
 
