@@ -117,18 +117,18 @@
       color: white;
       font-family: sans-serif;
       font-size: 18px;
-    } 
-      
+    }
+
     .item {
       display: inline-block;
       padding: 20px;
-    } 
-      
+    }
+
     .title {
       padding-bottom: 5px;
       display: block;
     }
-      
+
     .info {
       margin-left: 20px;
       margin-right: 20px;
@@ -163,7 +163,7 @@
       $imgs = "The image";
     }
 
-    echo "<div class='info'>" . count($modes) . " " . $effects . " processed in " . $diff . " " . $seconds . "</div>";
+    echo "<div class='info'>" . count($modes) . " " . $effects . " processed in " . $diff . " " . $seconds . " | <button id='download'>Download All</button></div>";
 
     $effect_name_1 = "Glitch";
     $effect_name_2 = "Wave";
@@ -184,6 +184,29 @@
       cleanup();
       exit(0);
     }
+
+    echo '<script src="zip.js"></script>
+    <script>
+    document.getElementById("download").addEventListener("click", function() {
+        var zip = new JSZip();
+        var images = document.querySelectorAll(".image");
+
+        images.forEach(function(img, i) {
+            var src = img.src;
+            var base64Data = src.split(",")[1];
+            zip.file("image_" + (i + 1) + ".gif", base64Data, {base64: true});
+        });
+
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(content);
+            link.download = "mutant_images.zip";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    });
+    </script>';
 
     cleanup();
   }
