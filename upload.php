@@ -80,7 +80,7 @@
   function process($filestring) {
     $modes = [];
     $num_effects = 8;
-    $delay = 0.25;
+    $delay = 0.3;
 
     for ($i = 1; $i <= $num_effects; $i++) {
       if(isset($_POST["effect_" . $i])) {
