@@ -27,7 +27,7 @@
   $num_images = 1;
   $images = [];
 
-  for ($i = 1; $i <= 4; $i++) {
+  for ($i = 1; $i <= 5; $i++) {
     $error = $_FILES["image_" . $i]['error'];
     if($error == UPLOAD_ERR_OK) {
       array_push($images, $_FILES["image_" . $i]);
@@ -39,7 +39,7 @@
     $ok = false;
   }
 
-  if(count($images) > 4) {
+  if(count($images) > 5) {
     echo "Too many images were provided.";
     $ok = false;
   }
