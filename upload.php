@@ -177,7 +177,6 @@
     try {
       for ($i = 0; $i < count($modes); $i++) {
         if (empty($paths[$i])) {
-          error_log("Empty path for mode index $i");
           continue;
         }
 
@@ -221,15 +220,15 @@
     global $paths;
 
     for ($i = 0; $i < count($paths); $i++) {
-        if (!empty($paths[$i]) && file_exists($paths[$i])) {
-            unlink($paths[$i]);
-        }
+      if (!empty($paths[$i]) && file_exists($paths[$i])) {
+        unlink($paths[$i]);
+      }
     }
 
     for ($i = 0; $i < count($uploaded); $i++) {
-        if (!empty($uploaded[$i]) && file_exists($uploaded[$i])) {
-            unlink($uploaded[$i]);
-        }
+      if (!empty($uploaded[$i]) && file_exists($uploaded[$i])) {
+        unlink($uploaded[$i]);
+      }
     }
   }
 ?>

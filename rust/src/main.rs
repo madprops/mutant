@@ -47,7 +47,7 @@ fn main() {
         .map(|s| s.clone())
         .collect::<Vec<String>>();
 
-    if paths.len() == 0 || paths.len() > 4 {
+    if paths.len() == 0 || paths.len() > 5 {
         exit(0)
     }
 
@@ -79,7 +79,7 @@ fn main() {
 
     img = img.thumbnail(width, height);
     dims = img.dimensions();
-    
+
     let mut bytes: Vec<Vec<u8>> = vec![img.to_rgb().to_vec()];
 
     if paths.len() > 1 {
@@ -92,20 +92,20 @@ fn main() {
                     exit(0);
                 }
             };
-    
+
             let imbuff = image::imageops::resize(&im, dims.0, dims.1, image::imageops::FilterType::Nearest);
             let mut byts: Vec<u8> = vec![];
-    
+
             for pixel in imbuff.pixels() {
                 byts.push(pixel[0]);
                 byts.push(pixel[1]);
                 byts.push(pixel[2]);
             }
-    
+
             bytes.push(byts);
         }
     }
-    
+
     let mut res_paths: Vec<String> = vec![];
 
     loop {
@@ -159,13 +159,13 @@ fn main() {
                 // Mirror
                 3 => {
                     match n {
-                        2 => {   
+                        2 => {
                             byts = line_reverse(byts, dims.0, "left");
                         },
                         3 => {
                             byts = line_reverse(byts, dims.0, "full");
                         },
-                        4 => {   
+                        4 => {
                             byts = line_reverse(byts, dims.0, "right");
                         }
                         _ => {}
@@ -174,7 +174,7 @@ fn main() {
                 // Static
                 4 => {
                     make_static(&mut byts);
-                
+
                     if n >= 2 {
                         if n >= paths.len() {
                             exit_early = true;
@@ -300,9 +300,9 @@ fn modify_bytes(bytes: &mut Vec<u8>, width: u32, height: u32, start: bool) {
     let mut rng = rand::thread_rng();
     let row = if start {0} else {rng.gen_range(0, height)};
 
-    let range = rng.gen_range((height as f64 * 0.1).round() as u32, 
+    let range = rng.gen_range((height as f64 * 0.1).round() as u32,
         (height as f64 * 0.6).round() as u32);
-    
+
     let mut i = if row == 0 {0} else {
         ((row * width * 3) - 1) as usize
     };
@@ -350,16 +350,16 @@ fn line_reverse(bytes: Vec<u8>, width: u32, mode: &str) -> Vec<u8> {
         let mut n = 0;
         let mut nbytes: Vec<u8> =vec![];
         let mut line: Vec<u8> = vec![];
-                        
+
         for byte in bytes.iter() {
             line.push(*byte);
             n += 1;
-    
+
             if n >= width {
                 for b in line.into_iter().rev() {
                     nbytes.push(b)
                 }
-    
+
                 n = 0;
                 line = vec![];
             }
@@ -426,7 +426,7 @@ fn swap_group(bytes: Vec<u8>, level: u32, width: u32) -> Vec<u8> {
     while limit > 0 && limit % 3 != 0 {
         limit -= 1;
     }
-    
+
     if limit < 3 * level {
         limit = 3 * level;
     }
@@ -545,8 +545,8 @@ fn decolorize(bytes: &mut Vec<u8>) {
 }
 
 fn random_word() -> String {
-    let a = vec!["a","e","i","o","u"];  
-    let b = vec!["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", 
+    let a = vec!["a","e","i","o","u"];
+    let b = vec!["b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
     "n", "p", "r", "s", "t", "v", "w", "x", "y", "z"];
     let mut word = "".to_string();
 
