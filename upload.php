@@ -176,6 +176,11 @@
 
     try {
       for ($i = 0; $i < count($modes); $i++) {
+        if (empty($paths[$i])) {
+          error_log("Empty path for mode index $i");
+          continue;
+        }
+
         echo "<div class='item'><div class='title'>" . ${"effect_name_" . $modes[$i]} . " | Size: " . round(filesize($paths[$i]) / 1024 / 1024, 1) . " MiB</div>";
         $data = file_get_contents($paths[$i]);
         echo "<img class='image' src='data:image/gif;base64," . base64_encode($data) . "'></div>";
