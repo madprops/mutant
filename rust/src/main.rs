@@ -10,6 +10,8 @@ use gif::{Frame, Encoder, Repeat, SetParameter};
 // mutant 2 250 image.jpg (use mode number 2)
 // mutant 1,3,5 100 image.jpg image2.png (use modes 1, 3, and 5, a delay of 100ms, with 2 images)
 
+const MAX_IMAGES: usize = 5;
+
 fn main() {
     let num_modes = 8;
     let args: Vec<String> = env::args().collect();
@@ -48,7 +50,7 @@ fn main() {
         .map(|s| s.clone())
         .collect::<Vec<String>>();
 
-    if paths.len() == 0 || paths.len() > 5 {
+    if (paths.len() == 0) || (paths.len() > MAX_IMAGES) {
         exit(0)
     }
 
@@ -243,7 +245,7 @@ fn main() {
             frames.push(frame);
 
             n += 1;
-            if exit_early || n > 4 {break}
+            if exit_early || (n > MAX_IMAGES) {break}
             bn += 1;
 
             if bn >= bytes.len() {
