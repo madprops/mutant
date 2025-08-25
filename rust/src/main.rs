@@ -36,7 +36,8 @@ fn main() {
     if delay == 0 {
         println!("Delay is too short.");
         exit(0);
-    } else if delay > 1000 {
+    }
+    else if delay > 1000 {
         println!("Delay is too long.");
         exit(0);
     }
@@ -68,12 +69,17 @@ fn main() {
     if dims.0 >= dims.1 {
         width = if dims.0 < 800 {
             dims.0
-        } else {800};
+        }
+
+        else {800};
         height = (width as f64 * ratio) as u32;
-    } else {
+    }
+    else {
         height = if dims.0 < 800 {
             dims.0
-        } else {800};
+        }
+
+        else {800};
         width = (height as f64 / ratio) as u32;
     }
 
@@ -185,7 +191,8 @@ fn main() {
                 5 => {
                     if n == 2 {
                         byts = reverse_group(byts, false);
-                    } else if n == 4 {
+                    }
+                    else if n == 4 {
                         byts = reverse_group(byts, true);
                     }
                 },
@@ -217,6 +224,7 @@ fn main() {
                 8 => {
                     if n % 2 == 0 {
                         decolorize(&mut byts);
+
                         if n >= paths.len() {
                             exit_early = true;
                         }
@@ -227,7 +235,8 @@ fn main() {
 
             let d = if n == 1 && double_first {
                 delay * 2
-            } else { delay };
+            }
+            else {delay};
 
             let mut frame = gif::Frame::from_rgb_speed(dims.0 as u16, dims.1 as u16, &mut byts, 30);
             frame.delay = d;
@@ -346,7 +355,8 @@ fn modify_bytes(bytes: &mut Vec<u8>, width: u32, height: u32, start: bool) {
 fn line_reverse(bytes: Vec<u8>, width: u32, mode: &str) -> Vec<u8> {
     if mode == "full" {
         return bytes.into_iter().rev().collect();
-    } else {
+    }
+    else {
         let mut n = 0;
         let mut nbytes: Vec<u8> =vec![];
         let mut line: Vec<u8> = vec![];
@@ -367,7 +377,8 @@ fn line_reverse(bytes: Vec<u8>, width: u32, mode: &str) -> Vec<u8> {
 
         if mode == "right" {
             return nbytes.into_iter().rev().collect();
-        } else {
+        }
+        else {
             return nbytes;
         }
     }
@@ -397,7 +408,8 @@ fn reverse_group(bytes: Vec<u8>, alt: bool) -> Vec<u8> {
                 nbytes.push(temp[1]);
                 nbytes.push(temp[2]);
                 nbytes.push(temp[0]);
-            } else {
+            }
+            else {
                 nbytes.push(temp[2]);
                 nbytes.push(temp[1]);
                 nbytes.push(temp[0]);
@@ -436,7 +448,8 @@ fn swap_group(bytes: Vec<u8>, level: u32, width: u32) -> Vec<u8> {
 
         if n <= limit {
             temp.push(*byte);
-        } else if n <= limit * 2 {
+        }
+        else if n <= limit * 2 {
             temp2.push(*byte);
         }
 
@@ -531,7 +544,8 @@ fn decolorize(bytes: &mut Vec<u8>) {
                     bytes[i - 2] = 255;
                     bytes[i - 1] = 255;
                     bytes[i - 0] = 255;
-                } else {
+                }
+                else {
                     bytes[i - 2] = 0;
                     bytes[i - 1] = 0;
                     bytes[i - 0] = 0;
@@ -553,7 +567,8 @@ fn random_word() -> String {
     for i in 1..=6 {
         let letter = if i % 2 == 0 {
             b.choose(&mut rand::thread_rng())
-        } else {
+        }
+        else {
             a.choose(&mut rand::thread_rng())
         };
 
